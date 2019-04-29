@@ -34,16 +34,16 @@ trait RestaurantRoutes extends JsonSupport {
         pathEnd {
           concat(
             get {
+              parameters('closed.as[Boolean]) { (closed) =>
+                val openRestaurants: Future[Restaurants] =
+                  (restaurantRegistryActor ? GetOpenedRestaurant(closed)).mapTo[Restaurants]
+                complete(openRestaurants)
+              }
+            },
+            get {
               val restaurants: Future[Restaurants] =
                 (restaurantRegistryActor ? GetRestaurants).mapTo[Restaurants]
               complete(restaurants)
-            },
-            get {
-              parameters('status.as[Boolean]) { (status) =>
-                val openRestaurants: Future[Restaurants] =
-                  (restaurantRegistryActor ? GetOpenedRestaurant(status)).mapTo[Restaurants]
-                complete(openRestaurants)
-              }
             },
             post {
               entity(as[Restaurant]) { restaurant =>
