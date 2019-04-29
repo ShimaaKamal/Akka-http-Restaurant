@@ -29,7 +29,7 @@ trait RestaurantRoutes extends JsonSupport {
 
   //#all-routes
   lazy val restRoutes: Route =
-    pathPrefix("restaurant") {
+    pathPrefix("api" / "restaurant") {
       concat(
         pathEnd {
           concat(
